@@ -37,36 +37,35 @@ class PopulateDatabase extends Command
         ]);
         $data = collect(json_decode($response->body()));
 
-        $data->each(function (stdClass $item) {
-            Country::create([
+        // create english so that english common and official name can be added
+        $englishLanguage = Language::create([
+           'code' => 'eng',
+           'name' => 'English',
+        ]);
+
+        $data->each(function (stdClass $item) use ($englishLanguage) {
+            $country = Country::create([
                 'country_code' => Str::lower($item->cca3),
                 'population' => $item->population,
                 'flag_url' => $item->flags->png,
                 'area' => $item->area,
             ]);
 
-            collect($item->languages)->each(function (string $name, string $key) {
+            $spokenLanguages = collect($item->languages);
+            $spokenLanguages->each(function (string $name, string $key) {
                 Language::updateOrInsert(
                     ['code' => $key],
                     ['name' => $name]
                 );
             });
-        });
 
-        // iterating over twice so that I have countries and languages to attach in relationships
-        $data->each(function (stdClass $item) {
-            $country = Country::where('country_code', Str::lower($item->cca3))->first();
-
-            $spokenLanguages = collect($item->languages)->keys();
-            $languages = Language::whereIn('code', $spokenLanguages)->get();
+            $languages = Language::whereIn('code', $spokenLanguages->keys())->get();
             $country->countryLanguages()->attach($languages);
 
-            $borderingCountries = collect($item->borders)->map(fn ($code) => Str::lower($code));
-            $countries = Country::whereIn('country_code', $borderingCountries)->get();
-            $country->neighbouringCountries()->attach($countries);
-
             $translations = collect($item->translations);
-            $translations->each(function (stdClass $item, string $key) use ($country) {
+            $nativeNames = collect($item->name->nativeName);
+            $names = $translations->merge($nativeNames);
+            $names->each(function (stdClass $item, string $key) use ($country) {
                 // some of the languages inside country name translations weren't attached to any country spoken languages
                 $language = Language::firstOrCreate(
                     ['code' => $key],
@@ -82,6 +81,24 @@ class PopulateDatabase extends Command
                     ]);
                 }
             });
+
+            foreach (CountryNameType::cases() as $nameType) {
+                CountryName::create([
+                    'country_id' => $country->id,
+                    'language_id' => $englishLanguage->id,
+                    'name_type' => $nameType,
+                    'name' => $item->name->{$nameType->value},
+                ]);
+            }
+        });
+
+        // iterating over second time to have all countries available to attach to neighbouring countries
+        $data->each(function (stdClass $item) {
+            $country = Country::where('country_code', Str::lower($item->cca3))->first();
+
+            $borderingCountries = collect($item->borders)->map(fn ($code) => Str::lower($code));
+            $countries = Country::whereIn('country_code', $borderingCountries)->get();
+            $country->neighbouringCountries()->attach($countries);
         });
     }
 }
