@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -33,9 +34,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/countries/find', [CountryController::class, 'findCountry'])
         ->name('countries.find');
+
     Route::get('/countries/{id}', [CountryController::class, 'show'])
         ->whereNumber('id')
         ->name('countries.show');
+    
+    Route::get('/languages/{id}', [LanguageController::class, 'show'])
+        ->whereNumber('id')
+        ->name('languages.show');
 });
 
 

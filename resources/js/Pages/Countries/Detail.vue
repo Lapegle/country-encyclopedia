@@ -4,7 +4,7 @@ import {Head} from "@inertiajs/vue3";
 import TextInfoItem from "@/Components/TextInfoItem.vue";
 import PillLink from "@/Components/PillLink.vue";
 
-const props = defineProps({country: Object})
+defineProps({country: Object})
 </script>
 
 <template>
@@ -35,13 +35,19 @@ const props = defineProps({country: Object})
                         </div>
                         <div class="mt-4">
                             <h2 class="font-bold mb-2">Neighbouring countries</h2>
-                            <div>
-                                <PillLink
-                                    v-for="neighbour in country.neighbouring_countries"
-                                    :link="'/countries/' + neighbour.id"
-                                    :text="neighbour.common_name"
-                                />
-                            </div>
+                            <PillLink
+                                v-for="neighbour in country.neighbouring_countries"
+                                :link="'/countries/' + neighbour.id"
+                                :text="neighbour.common_name"
+                            />
+                        </div>
+                        <div class="mt-4">
+                            <h2 class="font-bold mb-2">Spoken languages</h2>
+                            <PillLink
+                                v-for="language in country.country_languages"
+                                :link="'/languages/' + language.id"
+                                :text="language.name"
+                            />
                         </div>
                     </div>
                 </div>
