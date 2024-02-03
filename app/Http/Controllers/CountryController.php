@@ -30,13 +30,18 @@ class CountryController extends Controller
 
     public function show(Request $request): Response
     {
+        /** @var User $user */
+        $user = auth()->user();
+
         $country = $this->countryRepository->getCountryById($request->id);
         $country->load(['countryLanguages', 'neighbouringCountries']);
         $populationRank = $this->countryRepository->getCountryPopulationRank($request->id);
+        $isFavorite = $this->favoriteCountryRepository->isFavoritedByUser($user, $country);
 
         return Inertia::render('Countries/Detail', [
             'country' => $country,
             'rank' => $populationRank,
+            'isFavorite' => $isFavorite,
         ]);
     }
 

@@ -1,13 +1,29 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Head} from "@inertiajs/vue3";
+import {Head, router} from "@inertiajs/vue3";
 import TextInfoItem from "@/Components/TextInfoItem.vue";
 import PillLink from "@/Components/PillLink.vue";
+import {StarIcon} from "@heroicons/vue/24/outline/index.js";
 
-defineProps({
+const props = defineProps({
     country: Object,
-    rank: Number
+    rank: Number,
+    isFavorite: Boolean
 })
+
+const updateFavorites = (adding = true) => {
+    const url = adding ? '/countries/add-to-favorites' : '/countries/remove-from-favorites';
+
+    axios.post(url, {
+        country_id: props.country.id
+    })
+        .then(() => {
+            router.reload({only: ['isFavorite']})
+        })
+        .catch((error) => {
+            console.error('Error toggling favorite country:', error)
+        })
+};
 </script>
 
 <template>
@@ -18,7 +34,12 @@ defineProps({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white shadow-sm sm:rounded-lg flex justify-center p-8">
                     <div class="max-w-3xl">
-                        <h1 class="font-bold text-4xl text-center">{{ country.common_name }}</h1>
+                        <div class="flex items-center justify-center">
+                            <h1 class="font-bold text-4xl">{{ country.common_name }}</h1>
+                            <StarIcon :class="isFavorite ? 'fill-amber-400' : 'fill-gray-200'"
+                                      class="ml-3 w-8" @click="updateFavorites(!isFavorite)"/>
+                        </div>
+
                         <div class="flex flex-col sm:flex-row-reverse justify-between mt-4">
                             <div
                                 class="sm:ml-52 bg-gray-200 shadow-xl p-2 rounded flex flex-col justify-center items-center">
