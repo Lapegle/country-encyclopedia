@@ -31,9 +31,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Home');
     })->name('home');
 
-    Route::get('/findCountry', [CountryController::class, 'findCountry'])
+    Route::get('/countries/find', [CountryController::class, 'findCountry'])
         ->name('countries.find');
-    Route::get('/country/{id}', [CountryController::class, 'show'])
+    Route::get('/countries/{id}', [CountryController::class, 'show'])
         ->whereNumber('id')
         ->name('countries.show');
 });

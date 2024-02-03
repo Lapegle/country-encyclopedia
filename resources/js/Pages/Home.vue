@@ -17,7 +17,7 @@ const onSearchBlur = () => {
 }
 
 const getCountries = debounce((search) => {
-    axios.get('/findCountry', {
+    axios.get('/countries/find', {
         params: {
             search
         }
@@ -59,7 +59,7 @@ watch(search, async (newSearch, oldSearch) => {
                         <div v-if="searchFocused" class="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg">
                             <ul class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:outline-none sm:text-sm sm:leading-5">
                                 <div v-for="country in countries" :key="country.country_code">
-                                    <Link :href="'/country/' + country.id">
+                                    <Link :href="'/countries/' + country.id">
                                         <li class="relative py-2 pl-3 text-gray-900 cursor-pointer hover:bg-indigo-200">
                                             <span class="block font-normal truncate">{{ country.common_name }}</span>
                                         </li>

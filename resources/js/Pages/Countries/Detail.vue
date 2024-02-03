@@ -38,7 +38,7 @@ const props = defineProps({country: Object})
                             <div>
                                 <PillLink
                                     v-for="neighbour in country.neighbouring_countries"
-                                    :link="'/country/' + neighbour.id"
+                                    :link="'/countries/' + neighbour.id"
                                     :text="neighbour.common_name"
                                 />
                             </div>
