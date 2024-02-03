@@ -51,7 +51,11 @@ watch(search, async (newSearch, oldSearch) => {
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white shadow-sm sm:rounded-lg flex-col justify-center p-8">
-                    <div class="w-full relative">
+                    <div class="flex flex-col justify-center items-center">
+                        <img class="w-32" src="/images/earth.png"/>
+                        <h1 class="font-bold text-4xl mt-2">Country Encyclopedia</h1>
+                    </div>
+                    <div class="w-full relative mt-20">
                         <InputLabel for="search" value="Search for a country"/>
                         <TextInput
                             id="search"
