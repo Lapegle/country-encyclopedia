@@ -13,7 +13,7 @@ const countries = ref([])
 const onSearchBlur = () => {
     setTimeout(() => {
         searchFocused.value = false;
-    }, 100);
+    }, 250);
 }
 
 const getCountries = debounce((search) => {
