@@ -13,6 +13,7 @@ class CountryController extends Controller
         $search = $request->input('search');
 
         $countries = Country::whereCountryName($search)
+            ->limit(10)
             ->get();
 
         return response()->json($countries);

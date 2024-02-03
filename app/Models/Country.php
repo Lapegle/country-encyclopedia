@@ -34,9 +34,9 @@ class Country extends Model
     public function scopeWhereCountryName(Builder $query, string $search): void
     {
         $query->whereHas('countryNames', function (Builder $query) use ($search) {
-            $query->where('name', 'like', "%$search%");
+            $query->where('name', 'ilike', "%$search%");
         })
-            ->orWhere('common_name', 'like', "%$search%")
-            ->orWhere('official_name', 'like', "%$search%");
+            ->orWhere('common_name', 'ilike', "%$search%")
+            ->orWhere('official_name', 'ilike', "%$search%");
     }
 }
