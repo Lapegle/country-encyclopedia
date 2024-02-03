@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -28,9 +29,8 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/home', function () {
-        return Inertia::render('Home');
-    })->name('home');
+    Route::get('/home', HomeController::class)
+        ->name('home');
 
     Route::get('/countries/find', [CountryController::class, 'findCountry'])
         ->name('countries.find');

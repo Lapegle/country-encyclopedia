@@ -5,6 +5,11 @@ import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import {ref, watch} from "vue";
 import {debounce} from "lodash";
+import CountryCard from "@/Components/CountryCard.vue";
+
+defineProps({
+    favoriteCountries: Object
+})
 
 const search = ref('')
 const searchFocused = ref(false)
@@ -45,7 +50,7 @@ watch(search, async (newSearch, oldSearch) => {
     <AuthenticatedLayout>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white shadow-sm sm:rounded-lg flex justify-center p-8">
+                <div class="bg-white shadow-sm sm:rounded-lg flex-col justify-center p-8">
                     <div class="w-full relative">
                         <InputLabel for="search" value="Search for a country"/>
                         <TextInput
@@ -73,6 +78,10 @@ watch(search, async (newSearch, oldSearch) => {
                                     Nothing found, try a again
                                 </div>
                             </ul>
+                        </div>
+                        <div class="mt-12">
+                            <h2 class="font-bold mb-3">My favorite countries</h2>
+                            <CountryCard v-for="country in favoriteCountries" :country="country"/>
                         </div>
                     </div>
                 </div>

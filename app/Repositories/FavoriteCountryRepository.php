@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Country;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 class FavoriteCountryRepository implements FavoriteCountryRepositoryInterface
 {
@@ -21,5 +22,10 @@ class FavoriteCountryRepository implements FavoriteCountryRepositoryInterface
     public function isFavoritedByUser(User $user, Country $country): bool
     {
         return $user->favoriteCountries->contains($country);
+    }
+
+    public function getFavouriteCountriesByUser(User $user): Collection
+    {
+        return $user->favoriteCountries;
     }
 }
