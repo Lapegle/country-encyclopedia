@@ -33,8 +33,11 @@ Now run `./vendor/bin/sail up`. Add `-d` to run in background.
 
 Then run these commands:
 
+- `sail artisan key:generate`
 - `sail artisan migrate --seed`
   P.S. It takes a while
+- `sail npm i`
+- `sail npm run dev`
 
 Command PopulateDatabase (app:populate-database) will be called through seeder automatically and a default user will be
 created
