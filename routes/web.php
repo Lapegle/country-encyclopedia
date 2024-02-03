@@ -31,7 +31,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Home');
     })->name('home');
 
-    Route::get('/findCountry', [CountryController::class, 'findCountry']);
+    Route::get('/findCountry', [CountryController::class, 'findCountry'])
+        ->name('countries.find');
+    Route::get('/country/{id}', [CountryController::class, 'show'])
+        ->whereNumber('id')
+        ->name('countries.show');
 });
 
 
@@ -41,4 +45,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
