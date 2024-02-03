@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Country;
+use App\Repositories\CountryRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -10,21 +10,24 @@ use Inertia\Response;
 
 class CountryController extends Controller
 {
+    public function __construct(
+        private CountryRepositoryInterface $countryRepository
+    )
+    {
+    }
+
     public function findCountry(Request $request): JsonResponse
     {
         $search = $request->input('search');
 
-        $countries = Country::whereCountryName($search)
-            ->limit(10)
-            ->get();
+        $countries = $this->countryRepository->findCountry($search);
 
         return response()->json($countries);
     }
 
     public function show(Request $request): Response
     {
-        $country = Country::with(['countryLanguages', 'neighbouringCountries'])
-            ->findOrFail($request->id);
+        $country = $this->countryRepository->getCountryById($request->id);
 
         return Inertia::render('Countries/Detail', [
             'country' => $country
