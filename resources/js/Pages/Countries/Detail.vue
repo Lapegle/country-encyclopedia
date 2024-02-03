@@ -17,13 +17,14 @@ const props = defineProps({country: Object})
                     <div class="max-w-3xl">
                         <h1 class="font-bold text-4xl text-center">{{ country.common_name }}</h1>
                         <div class="flex flex-col sm:flex-row-reverse justify-between mt-4">
-                            <div class="sm:ml-52 flex flex-col justify-center items-center">
+                            <div
+                                class="sm:ml-52 bg-gray-200 shadow-xl p-2 rounded flex flex-col justify-center items-center">
                                 <img
                                     :alt="'Flag of ' + country.official_name"
                                     :src="country.flag_url"
                                     class="w-48"
                                 />
-                                <p class="text-sm italic">Flag of {{ country.common_name }}</p>
+                                <p class="text-sm italic mt-2">Flag of {{ country.common_name }}</p>
                             </div>
                             <div class="mt-4 sm:mt-0">
                                 <TextInfoItem :value="country.official_name" description="Official name"/>
