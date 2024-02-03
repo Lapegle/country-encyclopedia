@@ -17,7 +17,7 @@ class Country extends Model
 
     protected $guarded = [];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
