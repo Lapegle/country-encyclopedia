@@ -1,5 +1,5 @@
 <script setup>
-import {Head} from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
@@ -9,6 +9,12 @@ import {debounce} from "lodash";
 const search = ref('')
 const searchFocused = ref(false)
 const countries = ref([])
+
+const onSearchBlur = () => {
+    setTimeout(() => {
+        searchFocused.value = false;
+    }, 100);
+}
 
 const getCountries = debounce((search) => {
     axios.get('/findCountry', {
@@ -47,17 +53,17 @@ watch(search, async (newSearch, oldSearch) => {
                             v-model="search"
                             class="w-full"
                             name="search"
-                            @blur="searchFocused = false"
+                            @blur="onSearchBlur"
                             @focus="searchFocused = true"
                         />
                         <div v-if="searchFocused" class="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg">
                             <ul class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:outline-none sm:text-sm sm:leading-5">
                                 <div v-for="country in countries" :key="country.country_code">
-                                    <li
-                                        class="relative py-2 pl-3 text-gray-900 cursor-pointer hover:bg-indigo-200"
-                                    >
-                                        <span class="block font-normal truncate">{{ country.common_name }}</span>
-                                    </li>
+                                    <Link :href="'/country/' + country.id">
+                                        <li class="relative py-2 pl-3 text-gray-900 cursor-pointer hover:bg-indigo-200">
+                                            <span class="block font-normal truncate">{{ country.common_name }}</span>
+                                        </li>
+                                    </Link>
                                 </div>
 
                                 <div

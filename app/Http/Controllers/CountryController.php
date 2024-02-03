@@ -23,7 +23,8 @@ class CountryController extends Controller
 
     public function show(Request $request): Response
     {
-        $country = Country::findOrFail($request->id);
+        $country = Country::with(['countryLanguages', 'neighbouringCountries'])
+            ->findOrFail($request->id);
 
         return Inertia::render('Countries/Detail', [
             'country' => $country
