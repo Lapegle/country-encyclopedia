@@ -37,18 +37,14 @@ class PopulateDatabase extends Command
         ]);
         $data = collect(json_decode($response->body()));
 
-        // create english so that english common and official name can be added
-        $englishLanguage = Language::create([
-           'code' => 'eng',
-           'name' => 'English',
-        ]);
-
-        $data->each(function (stdClass $item) use ($englishLanguage) {
+        $data->each(function (stdClass $item) {
             $country = Country::create([
                 'country_code' => Str::lower($item->cca3),
                 'population' => $item->population,
                 'flag_url' => $item->flags->png,
                 'area' => $item->area,
+                'common_name' => $item->name->common,
+                'official_name' => $item->name->official,
             ]);
 
             $spokenLanguages = collect($item->languages);
@@ -81,15 +77,6 @@ class PopulateDatabase extends Command
                     ]);
                 }
             });
-
-            foreach (CountryNameType::cases() as $nameType) {
-                CountryName::create([
-                    'country_id' => $country->id,
-                    'language_id' => $englishLanguage->id,
-                    'name_type' => $nameType,
-                    'name' => $item->name->{$nameType->value},
-                ]);
-            }
         });
 
         // iterating over second time to have all countries available to attach to neighbouring countries
