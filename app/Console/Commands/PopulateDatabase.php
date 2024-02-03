@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\CountryName;
 use App\Models\Language;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use stdClass;
@@ -38,14 +39,14 @@ class PopulateDatabase extends Command
         $data = collect(json_decode($response->body()));
 
         $data->each(function (stdClass $item) {
-            $country = Country::create([
+            $country = Country::withoutEvents(fn() => Country::create([
                 'country_code' => Str::lower($item->cca3),
                 'population' => $item->population,
                 'flag_url' => $item->flags->png,
                 'area' => $item->area,
                 'common_name' => $item->name->common,
                 'official_name' => $item->name->official,
-            ]);
+            ]));
 
             $spokenLanguages = collect($item->languages);
             $spokenLanguages->each(function (string $name, string $key) {
@@ -83,9 +84,11 @@ class PopulateDatabase extends Command
         $data->each(function (stdClass $item) {
             $country = Country::where('country_code', Str::lower($item->cca3))->first();
 
-            $borderingCountries = collect($item->borders)->map(fn ($code) => Str::lower($code));
+            $borderingCountries = collect($item->borders)->map(fn($code) => Str::lower($code));
             $countries = Country::whereIn('country_code', $borderingCountries)->get();
             $country->neighbouringCountries()->attach($countries);
         });
+
+        Cache::forget('countries_population');
     }
 }
