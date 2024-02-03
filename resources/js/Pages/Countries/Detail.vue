@@ -4,6 +4,7 @@ import {Head, router} from "@inertiajs/vue3";
 import TextInfoItem from "@/Components/TextInfoItem.vue";
 import PillLink from "@/Components/PillLink.vue";
 import {StarIcon} from "@heroicons/vue/24/outline/index.js";
+import {toast} from 'vue3-toastify';
 
 const props = defineProps({
     country: Object,
@@ -19,9 +20,10 @@ const updateFavorites = (adding = true) => {
     })
         .then(() => {
             router.reload({only: ['isFavorite']})
+            toast.success(adding ? 'Added to favorites' : 'Removed from favorites')
         })
         .catch((error) => {
-            console.error('Error toggling favorite country:', error)
+            toast.error(error.message)
         })
 };
 </script>

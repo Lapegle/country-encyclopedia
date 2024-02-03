@@ -45,7 +45,7 @@ class CountryController extends Controller
         ]);
     }
 
-    public function addToFavorites(Request $request)
+    public function addToFavorites(Request $request): void
     {
         /** @var User $user */
         $user = auth()->user();
@@ -54,7 +54,7 @@ class CountryController extends Controller
         $this->favoriteCountryRepository->addFavoriteCountry($user, $country);
     }
 
-    public function removeFromFavorites(Request $request)
+    public function removeFromFavorites(Request $request): void
     {
         /** @var User $user */
         $user = auth()->user();
