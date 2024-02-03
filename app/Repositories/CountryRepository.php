@@ -17,9 +17,7 @@ class CountryRepository implements CountryRepositoryInterface
 
     public function getCountryById(int $id): ?Country
     {
-        return Country::with(['countryLanguages', 'neighbouringCountries'])
-            ->where('id', $id)
-            ->first();
+        return Country::find($id);
     }
 
     public function getCountryPopulationRank(int $id): int

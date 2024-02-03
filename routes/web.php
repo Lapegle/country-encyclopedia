@@ -38,7 +38,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/countries/{id}', [CountryController::class, 'show'])
         ->whereNumber('id')
         ->name('countries.show');
-    
+
+    Route::post('/countries/add-to-favorites', [CountryController::class, 'addToFavorites'])
+        ->name('countries.add_to_favorites');
+
+    Route::post('/countries/remove-from-favorites', [CountryController::class, 'removeFromFavorites'])
+        ->name('countries.remove_from_favorites');
+
     Route::get('/languages/{id}', [LanguageController::class, 'show'])
         ->whereNumber('id')
         ->name('languages.show');
