@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -28,5 +29,14 @@ class Country extends Model
     public function countryNames(): HasMany
     {
         return $this->hasMany(CountryName::class);
+    }
+
+    public function scopeWhereCountryName(Builder $query, string $search): void
+    {
+        $query->whereHas('countryNames', function (Builder $query) use ($search) {
+            $query->where('name', 'like', "%$search%");
+        })
+            ->orWhere('common_name', 'like', "%$search%")
+            ->orWhere('official_name', 'like', "%$search%");
     }
 }
