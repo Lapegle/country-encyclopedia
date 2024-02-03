@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Country;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class CountryRepository implements CountryRepositoryInterface
 {
@@ -19,5 +20,14 @@ class CountryRepository implements CountryRepositoryInterface
         return Country::with(['countryLanguages', 'neighbouringCountries'])
             ->where('id', $id)
             ->first();
+    }
+
+    public function getCountryPopulationRank(int $id): int
+    {
+        $countries = Cache::rememberForever('countries_population', function () {
+            return Country::orderBy('population', 'desc')->get();
+        });
+
+        return $countries->pluck('id')->search($id) + 1;
     }
 }

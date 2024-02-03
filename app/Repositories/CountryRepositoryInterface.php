@@ -10,4 +10,6 @@ interface CountryRepositoryInterface
     public function findCountry(string $search): Collection;
 
     public function getCountryById(int $id): ?Country;
+
+    public function getCountryPopulationRank(int $id): int;
 }

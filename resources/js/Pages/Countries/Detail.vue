@@ -4,7 +4,10 @@ import {Head} from "@inertiajs/vue3";
 import TextInfoItem from "@/Components/TextInfoItem.vue";
 import PillLink from "@/Components/PillLink.vue";
 
-defineProps({country: Object})
+defineProps({
+    country: Object,
+    rank: Number
+})
 </script>
 
 <template>
@@ -29,7 +32,10 @@ defineProps({country: Object})
                             <div class="mt-4 sm:mt-0">
                                 <TextInfoItem :value="country.official_name" description="Official name"/>
                                 <TextInfoItem :value="country.country_code.toUpperCase()" description="Country code"/>
-                                <TextInfoItem :value="String(country.population)" description="Population"/>
+                                <TextInfoItem
+                                    :value="`${String(country.population)} (#${rank} in the world)`"
+                                    description="Population"
+                                />
                                 <TextInfoItem :value="String(country.area)" description="Area (km²)"/>
                             </div>
                         </div>

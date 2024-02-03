@@ -20,7 +20,7 @@ class LanguageController extends Controller
         $language = $this->languageRepository->getLanguageById($request->id);
 
         return Inertia::render('Languages/Detail', [
-            'language' => $language
+            'language' => $language,
         ]);
     }
 }

@@ -28,9 +28,11 @@ class CountryController extends Controller
     public function show(Request $request): Response
     {
         $country = $this->countryRepository->getCountryById($request->id);
+        $populationRank = $this->countryRepository->getCountryPopulationRank($request->id);
 
         return Inertia::render('Countries/Detail', [
-            'country' => $country
+            'country' => $country,
+            'rank' => $populationRank,
         ]);
     }
 }
